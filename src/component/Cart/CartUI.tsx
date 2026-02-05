@@ -1,6 +1,6 @@
-import React from "react";
 import type { CartUIProps } from "../../utils/Types";
 import Button from "../Button";
+import removeIcon from "/images/icon-remove-item.svg";
 import { formatPrice } from "../../utils/priceFormatter";
 
 const CartUI = ({
@@ -18,7 +18,7 @@ const CartUI = ({
         <span>@{formatPrice(price)}</span>
         <span className="ml-3">{formatPrice(totalPrice)}</span>
       </section>
-      <Button onClick={onClick} text={"X"} style={"text-red-500"} />
+      <Button onClick={onClick} icon={removeIcon} style={"w-5 h-5 border border-addToCart hover:border-hover hover-filter-red hover:bg-white flex justify-center items-center"} />
     </div>
   );
 };

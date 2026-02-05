@@ -20,7 +20,7 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
 
     setAddedList((prev) => {
       const existingIndex = prev.findIndex(
-        (item) => item.name === product.name
+        (item) => item.name === product.name,
       );
 
       if (existingIndex >= 0) {
@@ -28,7 +28,7 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
         return prev.map((item, index) =>
           index === existingIndex
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
 
@@ -57,22 +57,26 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
   const getTotalPrice = () => {
     return addedList.reduce(
       (total, item) => total + item.price * item.quantity,
-      0
+      0,
     );
   };
 
   const handleDecreaseProduct = (product: Product) => {
-    setAddedList((prev) =>
-      prev
-        .map((item) =>
-          item.name === product.name && item.quantity > 1
-            ? { ...item, quantity: item.quantity-- }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
+  setAddedList((prev) =>
+    prev
+      .map((item) => {
+        if (item.name === product.name) {
+          if (item.quantity === 1) {
+            // Return null to mark for removal
+            return null;
+          }
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        return item;
+      })
+      .filter((item) => item !== null) // Simple filter without type guard
+  );
+};
   const isProductInCart = (productName: string) => {
     return addedList.findIndex((item) => item.name === productName) >= 0;
   };
